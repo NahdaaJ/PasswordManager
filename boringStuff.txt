@@ -1,5 +1,0 @@
-Site: Google   Username: jnahdaa@gmail.com     Password: fakiefakie
-Site: Youtube   Username: fjd     Password: fjdj
-Site: Netflix   Username: h     Password: y
-Site: League of Legends   Username: Iscuk     Password: biggerpp
-Site: GitHub   Username: p     Password: p

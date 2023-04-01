@@ -9,6 +9,8 @@ from pathlib import Path
 import datetime
 
 # Defining Functions
+
+# Validate master username and password function. ----------------------------------------------------------------------
 def validatePW(username, password):
     correctUsername = "NJawed1999"
     correctPassword = "Pr0gram2023!"
@@ -18,9 +20,11 @@ def validatePW(username, password):
 
     print("Username or password incorrect.")
 
+
+# Menu function, where you have access to other functions. -------------------------------------------------------------
 def menuFunc():
     continueLoop = 1
-    print("Would you like to add a password (add), view your passwords (view), or leave (quit)?")
+    print("Would you like to add a password (add), view your passwords (view), delete a password (delete), or leave (quit)?")
 
     while continueLoop == 1:
         userAnswer = input().lower()
@@ -40,6 +44,10 @@ def menuFunc():
             print("Thank you for using the Password Manager. Goodbye.")
             exit()
 
+        elif userAnswer == "delete":
+            deletePassword()
+            menuFunc()
+
         else:
             print("Invalid entry, please try again.")
             menuFunc()
@@ -47,7 +55,7 @@ def menuFunc():
         return
 
 
-
+# Function to add more passwords to the password file. -----------------------------------------------------------------
 def addPassword():
     # create a Path object with the path to the file
     fileExist = Path('./boringStuff.txt').is_file()
@@ -77,11 +85,10 @@ def addPassword():
     newPW = open("boringStuff.txt", "a")
     newPW.write(f"Site: {newSite}   Username: {newUsername}     Password: {newPassword}\n")
     print("\nPassword added. Taking you back to the menu.")
+    return
 
 
-
-
-
+# Function to view exisiting stored passwords. -------------------------------------------------------------------------
 def viewPasswords():
     whichSite = ""
     viewAgain = ""
@@ -96,8 +103,6 @@ def viewPasswords():
                 if line.find(whichSite) != -1:
                     print(line)
 
-
-
         viewPW.close()
 
         viewAgain = input("Would you like to view another password? (Y/N)").lower()
@@ -105,7 +110,28 @@ def viewPasswords():
     print("Passwords file closed. Taking you back to the menu.\n")
 
 
+# Function to delete stored passwords. ---------------------------------------------------------------------------------
+def deletePassword():
+    deleteAgain = ""
 
+    while deleteAgain != "n":
+        whichSite = input("Which sites password would you like to delete?\nYour input is CASE SENSITIVE.\n")
+        with open("boringStuff.txt", "r") as f:
+            lines = f.readlines()
+            f.close()
+        with open("boringStuff.txt", "w") as f:
+            for line in lines:
+                if whichSite not in line:
+                    f.write(line)
+
+        print(f"Your {whichSite} username and password has been deleted.")
+        deleteAgain = input("Would you like to delete another password? (Y/N)\n").lower()
+
+    f.close()
+    print("Taking you back to the main menu.\n")
+
+
+# Function to run the main password manager.----------------------------------------------------------------------------
 def pwManager():
     loginAttempt = 0
     fileExist = Path('./LoginAttempt.txt').is_file()
