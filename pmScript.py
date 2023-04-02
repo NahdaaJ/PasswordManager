@@ -7,6 +7,8 @@
 # Importing important modules.
 from pathlib import Path
 import datetime
+import random
+import string
 
 # Defining Functions
 
@@ -24,7 +26,7 @@ def validatePW(username, password):
 # Menu function, where you have access to other functions. -------------------------------------------------------------
 def menuFunc():
     continueLoop = 1
-    print("Would you like to add a password (add), view your passwords (view), delete a password (delete), or leave (quit)?")
+    print("Would you like to:\n• Add a Password (add)\n• View Your Passwords (view)\n• Delete a Password (delete)\n• Generate a Password (generate)\n• Leave (quit)\n")
 
     while continueLoop == 1:
         userAnswer = input().lower()
@@ -46,11 +48,28 @@ def menuFunc():
             deletePassword()
             menuFunc()
 
+        elif userAnswer == "generate":
+            genPassword()
+            menuFunc()
+
         else:
             print("Invalid entry, please try again.")
             menuFunc()
 
         return
+
+# Function to generate strong passwords. -------------------------------------------------------------------------------
+def genPassword():
+    # get random password pf length 8 with letters, digits, and symbols
+    characters = string.ascii_letters + string.digits + string.punctuation
+    genAgain = ""
+
+    while genAgain != "n":
+        generatedPW = ''.join(random.choice(characters) for i in range(16))
+        print(f"\nGenerated Password:{generatedPW}")
+        genAgain = input("Generate another password? (Y/N) ").lower()
+
+    print("Returning you to the main menu.")
 
 
 # Function to add more passwords to the password file. -----------------------------------------------------------------
@@ -114,13 +133,13 @@ def viewPasswords():
         print("\n")
         f = open("boringStuff.txt","r")
         print(f.read())
+        f.close()
 
     else:
         print("Invalid input. Please try again.\n")
         viewPasswords()
 
     print("Passwords file closed. Taking you back to the menu.\n")
-    f.close()
 
 # Function to delete stored passwords. ---------------------------------------------------------------------------------
 def deletePassword():
