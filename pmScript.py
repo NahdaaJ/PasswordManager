@@ -34,11 +34,9 @@ def menuFunc():
             userAnswer = 0
             menuFunc()
 
-
         elif userAnswer == "view":
             viewPasswords()
             menuFunc()
-
 
         elif userAnswer =="quit":
             print("Thank you for using the Password Manager. Goodbye.")
@@ -68,6 +66,7 @@ def addPassword():
         if fileExist == False :
             print("Passwords file does not exist. Creating one now.")
             newPW = open("boringStuff.txt", "x")
+            fileExist = True
             addPassword()
 
         else:
@@ -76,39 +75,52 @@ def addPassword():
             newSite = input("Site: ")
             newUsername = input("Username/email: ")
             newPassword = input("Password: ")
+            print(f"\nYou have input:\nSite/Software: {newSite}         Username/email: {newUsername}           Password: {newPassword}")
+            isCorrect = input("Is this correct? (Y/N) ").lower()
 
 
-        print(f"\nYou have input:\nSite/Software: {newSite}         Username/email: {newUsername}           Password: {newPassword}")
-        isCorrect = input("Is this correct? (Y/N) ").lower()
-
+    siteStr = "Site: " +newSite
+    userStr = "Username: " +newUsername
+    passStr = "Password: " +newPassword
 
     newPW = open("boringStuff.txt", "a")
-    newPW.write(f"Site: {newSite}   Username: {newUsername}     Password: {newPassword}\n")
+    newPW.write(siteStr.ljust(40)+userStr.ljust(40)+passStr.ljust(40)+"\n")
     print("\nPassword added. Taking you back to the menu.")
     return
-
 
 # Function to view exisiting stored passwords. -------------------------------------------------------------------------
 def viewPasswords():
     whichSite = ""
     viewAgain = ""
+    viewMode = ""
 
-    while viewAgain != "n":
-        print("Which site's username and password are you looking for?\nYour entry is CASE SENSITIVE.")
-        whichSite = input()
-        with open (r"boringStuff.txt","r") as viewPW:
+    viewMode = input("\nWould you like to see one password (single) or all your passwords (all)?\n").lower()
+    if viewMode == "single":
+        while viewAgain != "n":
+            print("Which site's username and password are you looking for?\nYour entry is CASE SENSITIVE.")
+            whichSite = input()
+            with open (r"boringStuff.txt","r") as viewPW:
 
-            lines = viewPW.readlines()
-            for line in lines:
-                if line.find(whichSite) != -1:
-                    print(line)
+                lines = viewPW.readlines()
+                for line in lines:
+                    if line.find(whichSite) != -1:
+                        print(line)
 
-        viewPW.close()
+            viewPW.close()
 
-        viewAgain = input("Would you like to view another password? (Y/N)").lower()
+            viewAgain = input("\nWould you like to view another password? (Y/N)").lower()
+
+    elif viewMode == "all":
+        print("\n")
+        f = open("boringStuff.txt","r")
+        print(f.read())
+
+    else:
+        print("Invalid input. Please try again.\n")
+        viewPasswords()
 
     print("Passwords file closed. Taking you back to the menu.\n")
-
+    f.close()
 
 # Function to delete stored passwords. ---------------------------------------------------------------------------------
 def deletePassword():
@@ -161,7 +173,7 @@ def pwManager():
     elif fileExist == False:
         print("Login attempt file does not exist. Creating now.")
         login = open("LoginAttempt.txt", "x")
+        fileExist = True
         pwManager()
-
 
 pwManager()
